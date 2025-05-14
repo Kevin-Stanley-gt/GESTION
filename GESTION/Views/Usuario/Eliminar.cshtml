@@ -1,0 +1,25 @@
+﻿@model GESTION.Models.Usuarios
+
+@{
+    ViewBag.Title = "Eliminar Usuario";
+}
+
+<h2>¿Está seguro de eliminar este usuario?</h2>
+
+<div>
+    <h4>@Model.Nombre @Model.Apellidos</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Usuario</dt>
+        <dd>@Model.Usuario</dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Id)
+
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        @Html.ActionLink("Cancelar", "Usuarios", null, new { @class = "btn btn-secondary" })
+    }
+</div>

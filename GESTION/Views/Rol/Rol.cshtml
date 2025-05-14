@@ -1,0 +1,39 @@
+﻿@model IEnumerable<GESTION.Models.Rol>
+
+@{
+    ViewBag.Title = "Lista de Roles";
+}
+
+<h2>Lista de Roles</h2>
+
+<p>
+    @Html.ActionLink("Crear Nuevo Rol", "Crear", null, new { @class = "btn btn-success" })
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Fecha de Creación</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rol in Model)
+        {
+            <tr>
+                <td>@rol.Id</td>
+                <td>@rol.Nombres</td>
+                <td>@rol.Descripcion</td>
+                <td>@rol.Creado_El.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    @Html.ActionLink("Detalles", "Detalles", new { id = rol.Id }, new { @class = "btn btn-info btn-sm" }) |
+                    @Html.ActionLink("Editar", "Editar", new { id = rol.Id }, new { @class = "btn btn-warning btn-sm" }) |
+                    @Html.ActionLink("Eliminar", "Eliminar", new { id = rol.Id }, new { @class = "btn btn-danger btn-sm" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

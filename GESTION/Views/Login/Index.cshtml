@@ -1,0 +1,57 @@
+﻿@model GESTION.Models.Usuario
+
+@{
+    ViewBag.Title = "Index";
+}
+<center>
+    <h2>Inicio Seccion</h2>
+</center>
+
+<div class="row">
+    <center>
+        <img src="~/Content/Imagenes/LOGO.png" alt="Logo" class="img-fluid mb-4" style="max-width: 400px;" />
+    </center>
+
+    <div div class="col-md-4 col-md-offset-4">
+        @using (Html.BeginForm("index", "login", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+
+
+            @Html.AntiForgeryToken()
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.NombreUsuario, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.NombreUsuario, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.NombreUsuario)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Contrasena, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.PasswordFor(m => m.Contrasena, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Contrasena)
+                </div>
+            </div><div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-primary">Iniciar Sesión </button>
+                </div>
+            </div>
+
+            if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Error
+                </div>
+            }
+        }
+    </div>
+
+</div>
+
+   
+
+

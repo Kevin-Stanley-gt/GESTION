@@ -1,0 +1,40 @@
+﻿@model List<GESTION.Models.Usuarios>
+
+@{
+    ViewBag.Title = "Usuarios";
+}
+
+<h2>Usuarios</h2>
+
+<p>
+    @Html.ActionLink("Crear Nuevo Usuario", "Crear", null, new { @class = "btn btn-success" })
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Rol</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Usuario</th>
+            <th>Creado El</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
+        {
+            <tr>
+                <td>@usuario.Rol</td>
+                <td>@usuario.Nombre</td>
+                <td>@usuario.Apellidos</td>
+                <td>@usuario.Usuario</td>
+                <td>@usuario.Creado_El.ToString("dd/MM/yyyy")</td>
+                <td>
+                    @Html.ActionLink("Editar", "Editar", new { id = usuario.Id }, new { @class = "btn btn-warning btn-sm" }) |
+                    @Html.ActionLink("Eliminar", "Eliminar", new { id = usuario.Id }, new { @class = "btn btn-danger btn-sm" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

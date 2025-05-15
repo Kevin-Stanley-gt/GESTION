@@ -1,0 +1,58 @@
+﻿@model GESTION.Models.Productos
+
+@{
+    ViewBag.Title = "Crear";
+}
+
+<center>
+    <h2>Crear Producto</h2>
+</center>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+
+    <div class="form-grouP">
+        @Html.LabelFor(P => P.Nombre)
+        @Html.TextBoxFor(P => P.Nombre, new { @class = "form-control" })
+    </div>
+    <div class="form-grouP">
+        @Html.LabelFor(P => P.Descripcion)
+        @Html.TextBoxFor(P => P.Descripcion, new { @class = "form-control" })
+    </div>
+    <div class="form-grouP">
+        @Html.LabelFor(P => P.Marca_Id, "Marca", htmlAttributes: new { @class = "control-label" })
+        @Html.DropDownListFor(P => P.Marca_Id, (List<SelectListItem>)ViewBag.Marca, "Seleccione un Proveedor", new { @class = "form-control" })
+    </div>
+    <div class="form-grouP">
+        @Html.LabelFor(P => P.Proveedor_Id, "Proveedor", htmlAttributes: new { @class = "control-label" })
+        @Html.DropDownListFor(P => P.Proveedor_Id, (List<SelectListItem>)ViewBag.Proveedores, "Seleccione un Proveedor", new { @class = "form-control" })
+    </div>
+    <div class="form-grouP">
+        @Html.LabelFor(P => P.Costo)
+        @Html.TextBoxFor(P => P.Costo, new { @class = "form-control" , type = "number", step = "0.01" })
+    </div>
+
+    <div class="form-grouP">
+        @Html.LabelFor(P => P.Barras)
+        @Html.TextBoxFor(P => P.Barras, new { @class = "form-control" })
+    </div>
+
+    <div class="form-grouP">
+        @Html.LabelFor(P => P.Activo)
+        @Html.CheckBoxFor(P => P.Activo)
+
+    </div>
+
+
+    <div class="form-group">
+        <input type="submit" value="Crear" class="btn btn-primary" />
+        @Html.ActionLink("Cancelar", "Productos", null, new { @class = "btn btn-secondary" })
+    </div>
+
+
+</div>
+}

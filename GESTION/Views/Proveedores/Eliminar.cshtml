@@ -1,0 +1,25 @@
+﻿@model GESTION.Models.Proveedores
+
+@{
+    ViewBag.Title = "Eliminar Proveedor";
+}
+
+<h2>¿Está seguro de eliminar este Proveedor?</h2>
+
+<div>
+    <h4>@Model.Nombre</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Razon Social</dt>
+        <dd>@Model.Razon_Social</dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(P => P.Id)
+
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        @Html.ActionLink("Cancelar", "Proveedores", null, new { @class = "btn btn-secondary" })
+    }
+</div>

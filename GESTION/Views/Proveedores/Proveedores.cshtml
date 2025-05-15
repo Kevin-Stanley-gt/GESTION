@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "Proveedores";
+}
+<center>
+    <h2>
+        Proveedores
+    </h2>
+</center>
+<p>
+    @Html.ActionLink("Crear Nuevo Proveedor", "Crear", null, new { @class = "btn btn-success" })
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Direccion</th>
+            <th>Telefono</th>
+            <th>Razon Social</th>
+            <th>Moneda</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var proveedores in Model)
+        {
+            <tr>
+                <td>@proveedores.Id</td>
+                <td>@proveedores.Nombre</td>
+                <td>@proveedores.Direccion</td>
+                <td>@proveedores.Telefono</td>
+                <td>@proveedores.Razon_Social</td>
+                <td>@proveedores.Moneda</td>
+
+                
+                <td>
+                    @Html.ActionLink("Editar", "Editar", new { id = proveedores.Id }, new { @class = "btn btn-warning btn-sm" }) |
+                    @Html.ActionLink("Eliminar", "Eliminar", new { id = proveedores.Id }, new { @class = "btn btn-danger btn-sm" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "Productos";
+}
+
+<h2>Productos</h2>
+
+<p>
+    @Html.ActionLink("Crear Nuevo Producto", "Crear", null, new { @class = "btn btn-success" })
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Descripcion</th>
+            <th>Marca</th>
+            <th>Proveedor</th>
+            <th>Costo</th>
+            <th>Activo</th>
+            <th>Barras</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Productos in Model)
+        {
+            <tr>
+                <td>@Productos.Id</td>
+                <td>@Productos.Nombre</td>
+                <td>@Productos.Descripcion</td>
+                <td>@Productos.Marca</td>
+                <td>@Productos.Proveedor</td>
+                <td>@Productos.Costo</td>
+                <td>@Productos.Activo</td>
+                <td>@Productos.Barras</td>
+                <td>
+                    @Html.ActionLink("Editar", "Editar", new { id = Productos.Id }, new { @class = "btn btn-warning btn-sm" }) |
+                    @Html.ActionLink("Eliminar", "Eliminar", new { id = Productos.Id }, new { @class = "btn btn-danger btn-sm" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

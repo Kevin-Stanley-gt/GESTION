@@ -1,0 +1,47 @@
+﻿@model GESTION.Models.Proveedores
+
+@{
+    ViewBag.Title = "Crear";
+}
+
+<h2>Crear</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+
+
+    <div class="form-group">
+        @Html.LabelFor(p => p.Nombre)
+        @Html.TextBoxFor(p => p.Nombre, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(p => p.Direccion)
+        @Html.TextBoxFor(p => p.Direccion, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(p => p.Telefono)
+        @Html.TextBoxFor(p => p.Telefono, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(p => p.Razon_Social)
+        @Html.TextBoxFor(p => p.Razon_Social, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(p => p.Moneda_Id, "Moneda", htmlAttributes: new { @class = "control-label" })
+        @Html.DropDownListFor(p => p.Moneda_Id, (List<SelectListItem>)ViewBag.Monedas, "Seleccione un Moneda", new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Crear" class="btn btn-primary" />
+        @Html.ActionLink("Cancelar", "Proveedores", null, new { @class = "btn btn-secondary" })
+    </div>
+</div>
+}

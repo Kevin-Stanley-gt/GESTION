@@ -1,0 +1,23 @@
+﻿@model GESTION.Models.Productos
+@{
+    ViewBag.Title = "Eliminar";
+}
+
+<h2>Eliminar</h2>
+
+<h2>¿Está seguro de eliminar este Producto?</h2>
+
+<div>
+    <h4>@Model.Nombre</h4>
+    <hr />
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(P => P.Id)
+
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        @Html.ActionLink("Cancelar", "Productos", null, new { @class = "btn btn-secondary" })
+    }
+</div>

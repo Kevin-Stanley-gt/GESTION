@@ -188,6 +188,7 @@ namespace GESTION.Controllers
                 return View(P);
             }
         }
+
         // Método para obtener la lista de monedas
         private List<SelectListItem> ObtenerMonedas()
         {

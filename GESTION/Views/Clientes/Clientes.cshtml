@@ -1,0 +1,54 @@
+﻿@model IEnumerable<GESTION.Models.Clientes>
+@{
+    ViewBag.Title = "Clientes";
+}
+
+<h2>Clientes</h2>
+
+
+
+
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<p>
+    @Html.ActionLink("Nuevo Cliente", "Crear", null, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>Tipo</th>
+            <th>Nombre</th>
+            <th>NIT</th>
+            <th>Dirección</th>
+            <th>Correo</th>
+            <th>Activo</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.Tipo</td>
+                <td>@c.Nombre</td>
+                <td>@c.Nit</td>
+                <td>@c.Direccion</td>
+                <td>@c.Correo</td>
+                <td>@(c.Activo ? "Sí" : "No")</td>
+                <td>
+                    @Html.ActionLink("Editar", "Editar", new { id = c.Id }, new { @class = "btn btn-sm btn-warning me-1" })
+                    @Html.ActionLink("Eliminar", "Eliminar", new { id = c.Id }, new { @class = "btn btn-sm btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

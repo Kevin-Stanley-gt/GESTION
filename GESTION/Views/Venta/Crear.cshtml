@@ -1,0 +1,162 @@
+﻿@model GESTION.Models.VentaViewModel
+
+@{
+    ViewBag.Title = "Nueva Venta";
+}
+
+<h2 class="mb-4">Nueva Venta</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        @if (TempData["PdfFile"] != null)
+        {
+            <br />
+            <a href="@Url.Action("DescargarFactura", "Venta", new { file = TempData["PdfFile"] })" class="btn btn-success mt-2" target="_blank">
+                Descargar Factura PDF
+            </a>
+        }
+    </div>
+}
+
+@Html.ValidationSummary(true, "Corrige los errores:", new { @class = "alert alert-danger" })
+
+@using (Html.BeginForm("Crear", "Venta", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <!-- Encabezado -->
+    <div class="form-row mb-4">
+        <div class="form-group col-md-4">
+            @Html.LabelFor(m => m.Encabezado.Cliente_Id, "Cliente")
+            @Html.DropDownListFor(m => m.Encabezado.Cliente_Id, Model.Clientes, "-- Seleccione --", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Encabezado.Cliente_Id, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group col-md-4">
+            @Html.Label("Total General")
+            <div id="total-venta" class="form-control">Q0.00</div>
+            @Html.HiddenFor(m => m.Encabezado.Costo_Total)
+            @Html.ValidationMessageFor(m => m.Encabezado.Costo_Total, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <!-- Detalle de Venta -->
+    <div class="card mb-4 p-3">
+        <h5>Agregar productos al detalle</h5>
+        <div class="form-inline mb-3">
+            <input id="txtBuscar" type="text" class="form-control mr-2" style="width:300px" placeholder="Teclea ≥4 letras..." />
+            <button id="btnBuscar" type="button" class="btn btn-info">Buscar</button>
+        </div>
+        <ul id="listaResultados" class="list-group mb-3" style="max-width:400px;"></ul>
+
+        <table class="table table-bordered" id="detalleTabla">
+            <thead class="table-light">
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unit.</th>
+                    <th>Subtotal</th>
+                    <th>Serie</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar Venta</button>
+}
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(function(){
+            let index = 0;
+            const currencySymbol = 'Q ';
+
+            function recalcular() {
+                let total = 0;
+                $('#detalleTabla tbody tr').each(function() {
+                    const sub = parseFloat($(this).find('.subtotal').text().replace(currencySymbol,'').trim()) || 0;
+                    total += sub;
+                });
+                $('#total-venta').text(`${currencySymbol}${total.toFixed(2)}`);
+                $('input[name="Encabezado.Costo_Total"]').val(total.toFixed(2));
+            }
+
+            $('#btnBuscar').click(function() {
+                const term = $('#txtBuscar').val().trim();
+                if (term.length < 4) {
+                    alert('Teclea al menos 4 caracteres.');
+                    return;
+                }
+                $.getJSON('@Url.Action("BuscarProductos","Venta")', { term }, function(data) {
+                    const $ul = $('#listaResultados').empty();
+                    if (!data.length) {
+                        $ul.append('<li class="list-group-item">No hay coincidencias.</li>');
+                    } else {
+                        data.forEach(p => {
+                            $ul.append(
+                                `<li class="list-group-item list-group-item-action"
+                                     data-id="${p.Id}"
+                                     data-nombre="${p.Nombre}"
+                                     data-precio="${p.Precio}">
+                                    ${p.Nombre} — ${currencySymbol}${p.Precio.toFixed(2)}
+                                </li>`
+                            );
+                        });
+                    }
+                });
+            });
+
+            $('#listaResultados').on('click', 'li', function() {
+                const id = $(this).data('id'),
+                      nombre = $(this).data('nombre'),
+                      precio = parseFloat($(this).data('precio'));
+                const row = $(`
+                    <tr>
+                        <td>
+                            ${nombre}
+                            <input type="hidden" name="Detalles[${index}].Producto_Id" value="${id}" />
+                        </td>
+                        <td>
+                            <input name="Detalles[${index}].Cantidad" type="number"
+                                   class="form-control cantidad" min="1" value="1" />
+                        </td>
+                        <td>
+                            <input name="Detalles[${index}].CostoUnitario" type="number"
+                                   class="form-control precio" step="0.01" value="${precio}" />
+                        </td>
+                        <td class="subtotal">${currencySymbol}${precio.toFixed(2)}</td>
+                        <td> <input name="Detalles[${index}].Comentario" type="text" class="form-control"/></td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm eliminar">X</button>
+                        </td>
+                    </tr>
+                `);
+                $('#detalleTabla tbody').append(row);
+                index++;
+                recalcular();
+                $('#listaResultados').empty();
+                $('#txtBuscar').val('');
+            });
+
+            $('#detalleTabla')
+                .on('input', '.cantidad, .precio', function() {
+                    const $tr = $(this).closest('tr'),
+                          qty = parseFloat($tr.find('.cantidad').val()) || 0,
+                          pr  = parseFloat($tr.find('.precio').val()) || 0,
+                          sub = qty * pr;
+                    $tr.find('.subtotal').text(`${currencySymbol}${sub.toFixed(2)}`);
+                    recalcular();
+                })
+                .on('click', '.eliminar', function() {
+                    $(this).closest('tr').remove();
+                    recalcular();
+                });
+        });
+    </script>
+}

@@ -1,0 +1,45 @@
+﻿@model GESTION.Models.Clientes
+
+@{
+    ViewBag.Title = "Editar Cliente";
+}
+
+<h2>Editar Cliente</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+    @Html.HiddenFor(m => m.Id)
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.Tipo_Id, "Tipo de Cliente")
+        @Html.DropDownListFor(m => m.Tipo_Id, (IEnumerable<SelectListItem>)ViewBag.Tipos, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Tipo_Id, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.Nombre)
+        @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.Nit)
+        @Html.TextBoxFor(m => m.Nit, new { @class = "form-control" })
+    </div>
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.Direccion)
+        @Html.TextBoxFor(m => m.Direccion, new { @class = "form-control" })
+    </div>
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.Correo)
+        @Html.TextBoxFor(m => m.Correo, new { @class = "form-control", type = "email" })
+    </div>
+    <div class="form-check mb-3">
+        @Html.CheckBoxFor(m => m.Activo, new { @class = "form-check-input" })
+        @Html.LabelFor(m => m.Activo, new { @class = "form-check-label" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary ms-2" })
+}
